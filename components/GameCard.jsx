@@ -2,6 +2,7 @@ import { View, Text, Image } from 'react-native';
 import React from 'react';
 import { StyleSheet } from 'react-native';  
 import  {flags}  from '../utils/flags';
+import { DateFormat } from '../utils/DateFormat';
 
 export default function GameCard({game}) {
     return (

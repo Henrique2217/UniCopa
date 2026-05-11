@@ -1,40 +1,38 @@
 import { StyleSheet, Text, View, Image, ImageBackground, SectionList } from 'react-native';
-import GameCard from './components/GameCard';
 import dados from './assets/dados.json'
-
+import { DateFormat } from './utils/DateFormat';
+import DiaCard from './components/DiaCard';
 
 export default function App() {
 
   const jogos = dados.jogos;
 
   const agruparPorData = (jogos) => {
-
     return jogos.reduce((acc, jogo) => {
 
-      const data = jogo.data_brasilia;
-      
+      const data = DateFormat(jogo.data_brasilia);
+
       if (!acc[data]) {
         acc[data] = [];
       }
-      
+
       acc[data].push(jogo);
+
       return acc;
-      
+
     }, {});
-  };
+  }
 
   const jogosAgrupados = agruparPorData(jogos);
 
   const jogosTratados = Object.keys(jogosAgrupados).map(data => {
     return {
-      title:data,
+      title: data,
       data: jogosAgrupados[data]
     }
   });
- 
 
-
-  return (
+return (
     <ImageBackground style={styles.container}
       source={require('./assets/bg-overlay.png')}>
       <Image style={styles.logo}
@@ -45,24 +43,13 @@ export default function App() {
 
       <SectionList
         sections={jogosTratados}
-        keyExtractor={(item, index) => item.toString() }
+        keyExtractor={(item) => item.id.toString()}
         renderItem={() => null}
-        renderSectionHeader={({section}) => (
-          <View style={styles.card}>
+        renderSectionHeader={({ section }) => (
 
-            <Text style={styles.data}> {section.title}</Text>
-            {
-                section.data.map((jogo) => (
-                  <GameCard key={jogo.id} game={jogo} />
-                ))
-            }
-
-           
-
-          </View>
+          <DiaCard data={section.title} jogos={section.data} />
         )}
       />
-      
 
     </ImageBackground>
   );
@@ -100,6 +87,4 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 10
   },
-
- 
 });
